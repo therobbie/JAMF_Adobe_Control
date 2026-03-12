@@ -1,2 +1,3 @@
-# JAMF_Scripts
-Place for custom JAMF Pro scripts for various tasks
+# JAMF - Adobe Control
+
+Summary: Script handles uninstalling/installing Adobe Applications. If application is already installed moves forward onto the next etc.
