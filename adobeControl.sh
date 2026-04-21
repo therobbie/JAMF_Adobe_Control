@@ -1,9 +1,12 @@
 #!/bin/bash
 # Author: Robert Henderson
-# Date: 02-21-2025
+# Date: 03-20-2026
 #
-## Adobe Control Script version 2.0
+## Adobe Control Script version 3.0
 ##
+
+## Updated handling to compute the base version. Using adobeuninstaller --list output to get this value.
+
 ## Description:
 #   Script will handle uninstalling Adobe Applications and also reinstalling based on what is "called".
 #   Control will be handle from JAMF Pro using scripti variables.
@@ -11,39 +14,18 @@
 ## Variable 5: Year Version (i.e. 2024 or 2025 etc..)
 ## Variable 6: All or Specific Suites (i.e. Photo, Video, Design, All)
 
-#### JAMF Pro Variables ####
+#### Variables ####
 actionVar="${4}"
 appYear="${5}"
 appList=($6 $7 $8 $9 ${10} ${11})
-
-#### Defaults ####
 
 appPath=""      # Holds path of app we are working on
 appSAPcode=""   # Holds Adobe SAP Code for application  
 appEventID=""   # Holds event ID for specific app
 appMajorVer=""  # Holds major version with correct number of minor digits
+appBaseVersion="" # Holds base version for app selected
 
 #### FUNCTIONS ####
-convert_version() {
-    local version="$1"
-    local IFS='.'
-    read -ra parts <<< "$version"
-    local major="${parts[0]}"
-    local zero_count=$(( ${#parts[@]} - 2 ))
-    # Add handler for Acrobat that has 2 minor version shown but only uses 1 for uninstall
-    if [ "${appChoosen}" == "acrobat" ] ; then
-        zero_count=$(${zero_count} - 1)
-    fi
-
-    local zeros=".0"
-    for (( minor=0; minor<zero_count; minor++ ))
-    do
-        zeros=${zeros}.0
-    done
-
-    # Output
-    echo "${major}${zeros}"
-}
 
 appSelector() {
     local appSelected="${1}"
@@ -161,23 +143,41 @@ appUninstall() {
         echo "Product Path: ${appPath}"
         
         # Get the Base Version from the application that is installed
-        baseVersion=$(defaults read "${appPath}/Contents/Info.plist" CFBundleShortVersionString)
-
-        # Convert version string into correct format for use with Adobe Uninstaller
-        baseVersion=$(convert_version "${baseVersion}")
+        appVersion=$(defaults read "${appPath}/Contents/Info.plist" CFBundleShortVersionString)
 
         echo "Uninstall SAP Code: ${appSAPcode}"
-        echo "Version: ${baseVersion}"
+        echo "Version: ${appVersion}"
 
-        # Run the Adobe uninstall command
-        /usr/local/adobe/AdobeUninstaller --products="${appSAPcode}"#"${baseVersion}"
+        # New method to get the correct base version for the currently selected app
+        adobeUninstallerInfo=$(/usr/local/adobe/AdobeUninstaller --list)
 
-        # Verify app is removed
-        if [ -d "${appPath}" ]; then
-            # Uninstall failed
-            echo "Application is still present. Uninstall failed"
+        # Extract only the major and minor numbers (xx.xx) from the user's input
+        # If you input 26.11.4, this converts it to 26.11
+        MAJOR_MINOR=$(echo "$appVersion" | sed -E 's/^([0-9]+\.[0-9]+).*$/\1/')
+
+        # Parse the variable using macOS-compatible BSD sed and a Here String (<<<) using data stored from uninstaller command
+        appBaseVersion=$(sed -n -E "s/^.*[[:space:]]${TARGET_SAPCODE}[[:space:]]+([^[:space:]]+)[[:space:]]+${MAJOR_MINOR}(\.[^[:space:]]+)?[[:space:]]*$/\1/p" <<< "${adobeUninstallerInfo}")
+
+         # Output base version found for logging in JAMF
+        echo "Base Version: ${appBaseVersion}"
+
+        # Make sure we have data in both variables
+        if [[ -n "${appSAPcode}" && -n "${appBaseVersion}" ]] ; then
+
+            # Run the Adobe uninstall command
+            /usr/local/adobe/AdobeUninstaller --products="${appSAPcode}"#"${appBaseVersion}"
+
+            # Verify app is removed
+            if [ -d "${appPath}" ]; then
+                # Uninstall failed
+                echo "Application is still present. Uninstall failed"
+            else
+                echo "Uninstall successful"
+            fi
         else
-            echo "Uninstall successful"
+            # Stop here, we do not have both variables. Something happened.
+            echo "Missing variable. SAP Code: ${appSAPcode} or Base Version: ${appBaseVersion}"
+            exit 1
         fi
     else
         # Echo not present
