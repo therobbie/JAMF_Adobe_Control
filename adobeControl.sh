@@ -65,43 +65,43 @@ appSelector() {
             echo "App chosen: acrobat"
             appPath="/Applications/Adobe Acrobat DC/Adobe Acrobat.app"
             appSAPcode="APRO"
-            appEventID="rit_adobeacrobatsdl"
+            appEventID="adobeacrobat"
             ;;
         "aftereffects")
             echo "App chosen: after effects"
             appPath="/Applications/Adobe After Effects ${appYear}/Adobe After Effects ${appYear}.app"
             appSAPcode="AEFT"
-            appEventID="rit_adobeaftereffectssdl"
+            appEventID="adobeaftereffects"
             ;;
         "animate")
             echo "App chosen: animate"
             appPath="/Applications/Adobe Animate 2024/Adobe Animate 2024.app"
             appSAPcode="FLPR"
-            appEventID="rit_adobeanimatesdl"
+            appEventID="adobeanimate"
             ;;    
         "audition")
             echo "App chosen: audition"
             appPath="/Applications/Adobe Audition ${appYear}/Adobe Audition ${appYear}.app"
             appSAPcode="AUDT"
-            appEventID="rit_adobeauditionsdl"
+            appEventID="adobeaudition"
             ;;
         "bridge")
             echo "App chosen: bridge"
             appPath="/Applications/Adobe Bridge ${appYear}/Adobe Bridge ${appYear}.app"
             appSAPcode="KBRG"
-            appEventID="rit_adobebridgesdl"
+            appEventID="adobebridge"
             ;;
         "character")
             echo "App chosen: character"
             appPath="/Applications/Adobe Character Animator ${appYear}/Adobe Character Animator ${appYear}.app"
             appSAPcode="CHAR"
-            appEventID="rit_adobecharacteranimator"
+            appEventID="adobecharacteranimator"
             ;;
         "dimension")
             echo "App chosen: dimension"
             appPath="/Applications/Adobe Dimension/Adobe Dimension.app"
             appSAPcode="ESHR"
-            appEventID="rit_adobedimension"
+            appEventID="adobedimension"
             ;;
         "dreamweaver")
             echo "App chosen: dreamweaver"
@@ -113,49 +113,49 @@ appSelector() {
             echo "App chosen: illustrator"
             appPath="/Applications/Adobe Illustrator ${appYear}/Adobe Illustrator.app"
             appSAPcode="ILST"
-            appEventID="rit_adobeillustratorsdl"
+            appEventID="adobeillustrator"
             ;;
         "incopy")
             echo "App chosen: incopy"
             appPath="/Applications/Adobe InCopy ${appYear}/Adobe InCopy ${appYear}.app"
             appSAPcode="AICY"
-            appEventID="rit_adobeincopysdl"
+            appEventID="adobeincopy"
             ;;
         "indesign")
             echo "App chosen: indesign"
             appPath="/Applications/Adobe InDesign ${appYear}/Adobe InDesign ${appYear}.app"
             appSAPcode="IDSN"
-            appEventID="rit_adobeindesignsdl"
+            appEventID="adobeindesign"
             ;;
         "lightroomclassic")
             echo "App chosen: lightroomclassic"
             appPath="/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app"
             appSAPcode="LTRM"
-            appEventID="rit_adobelightroomclassicsdl"
+            appEventID="adobelightroomclassic"
             ;;
         "mediaencoder")
             echo "App chosen: media encoder"
             appPath="/Applications/Adobe Media Encoder ${appYear}/Adobe Media Encoder ${appYear}.app"
             appSAPcode="AME"
-            appEventID="rit_adobemediaencoder"
+            appEventID="adobemediaencoder"
             ;;
         "photoshop")
             echo "App chosen: photoshop"
             appPath="/Applications/Adobe Photoshop ${appYear}/Adobe Photoshop ${appYear}.app"
             appSAPcode="PHSP"
-            appEventID="rit_adobephotoshopsdl"
+            appEventID="adobephotoshop"
             ;;
         "premierepro")
             echo "App chosen: premiere pro"
             appPath="/Applications/Adobe Premiere Pro ${appYear}/Adobe Premiere Pro ${appYear}.app"
             appSAPcode="PPRO"
-            appEventID="rit_adobepremiereprosdl"
+            appEventID="adobepremierepro"
             ;;
         "premiererush")
             echo "App chosen: premiere rush"
             appPath="/Applications/Adobe Premiere Rush 2.0/Adobe Premiere Rush.app"
             appSAPcode="RUSH"
-            appEventID="rit_adobepremiererushsdl"
+            appEventID="adobepremiererush"
             ;;
         *)
             echo "App selected was not found in selector."
